@@ -1,1 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Encuesta de Salud</title>
 
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body{
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background: linear-gradient(135deg, #0f172a, #1e3a8a, #2563eb);
+      padding:20px;
+    }
+
+    .contenedor{
+      width:100%;
+      max-width:520px;
+      background: rgba(255,255,255,0.12);
+      border:1px solid rgba(255,255,255,0.2);
+      backdrop-filter: blur(12px);
+      border-radius:25px;
+      padding:35px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.35);
+      color:white;
+    }
+
+    .pantallita{
+      width:100%;
+      height:14px;
+      background:#60a5fa;
+      border-radius:20px;
+      margin-bottom:25px;
+      box-shadow:0 0 15px #93c5fd;
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:10px;
+      font-size:32px;
+    }
+
+    p{
+      text-align:center;
+      margin-bottom:30px;
+      color:#dbeafe;
+      font-size:14px;
+    }
+
+    form{
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+    }
+
+    .grupo{
+      display:flex;
+      flex-direction:column;
+    }
+
+    label{
+      margin-bottom:8px;
+      font-weight:bold;
+      color:#eff6ff;
+    }
+
+    input,
+    select{
+      padding:14px;
+      border:none;
+      border-radius:14px;
+      outline:none;
+      font-size:15px;
+      background: rgba(255,255,255,0.92);
+      color:#0f172a;
+    }
+
+    input[type="range"]{
+      padding:0;
+      accent-color:#2563eb;
+      cursor:pointer;
+    }
+
+    .valor-range{
+      text-align:center;
+      margin-top:8px;
+      font-size:15px;
+      color:#bfdbfe;
+    }
+
+    button{
+      margin-top:10px;
+      padding:15px;
+      border:none;
+      border-radius:16px;
+      background:#3b82f6;
+      color:white;
+      font-size:16px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:0.3s;
+      box-shadow:0 5px 15px rgba(59,130,246,0.5);
+    }
+
+    button:hover{
+      background:#2563eb;
+      transform:translateY(-2px);
+    }
+
+    .resultado{
+      margin-top:25px;
+      background: rgba(255,255,255,0.12);
+      border-radius:16px;
+      padding:18px;
+      display:none;
+      line-height:1.8;
+      color:#e0f2fe;
+    }
+
+    @media(max-width:600px){
+      .contenedor{
+        padding:25px;
+      }
+
+      h1{
+        font-size:26px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor">
+
+    <div class="pantallita"></div>
+
+    <h1>Encuesta de Salud</h1>
+    <p>Completa el formulario con tu información.</p>
+
+    <form id="formSalud">
+
+      <div class="grupo">
+        <label>Edad</label>
+        <input 
+          type="number" 
+          id="edad"
+          min="1"
+          max="120"
+          required
+          placeholder="Ingresa tu edad">
+      </div>
+
+      <div class="grupo">
+        <label>Peso (kg)</label>
+        <input 
+          type="number"
+          id="peso"
+          min="20"
+          max="300"
+          required
+          placeholder="Ejemplo: 65">
+      </div>
+
+      <div class="grupo">
+        <label>Horas de sueño por día</label>
+        <input 
+          type="number"
+          id="sueno"
+          min="1"
+          max="24"
+          required
+          placeholder="Ejemplo: 8">
+      </div>
+
+      <div class="grupo">
+        <label>Nivel de dolor</label>
+        <input 
+          type="range"
+          id="dolor"
+          min="0"
+          max="10"
+          value="5">
+        
+        <div class="valor-range">
+          Nivel actual: <span id="valorDolor">5</span>
+        </div>
+      </div>
+
+      <div class="grupo">
+        <label>Tipo de sangre</label>
+        <select id="sangre" required>
+          <option value="">Selecciona una opción</option>
+          <option>A+</option>
+          <option>A-</option>
+          <option>B+</option>
+          <option>B-</option>
+          <option>AB+</option>
+          <option>AB-</option>
+          <option>O+</option>
+          <option>O-</option>
+        </select>
+      </div>
+
+      <button type="submit">Enviar encuesta</button>
+
+    </form>
+
+    <div class="resultado" id="resultado"></div>
+
+  </div>
+
+  <script>
+    const rangoDolor = document.getElementById("dolor");
+    const valorDolor = document.getElementById("valorDolor");
+    const formulario = document.getElementById("formSalud");
+    const resultado = document.getElementById("resultado");
+
+    rangoDolor.addEventListener("input", () => {
+      valorDolor.textContent = rangoDolor.value;
+    });
+
+    formulario.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const edad = document.getElementById("edad").value;
+      const peso = document.getElementById("peso").value;
+      const sueno = document.getElementById("sueno").value;
+      const dolor = document.getElementById("dolor").value;
+      const sangre = document.getElementById("sangre").value;
+
+      resultado.style.display = "block";
+
+      resultado.innerHTML = `
+        <h3>Datos registrados</h3>
+        <br>
+        <strong>Edad:</strong> ${edad} años <br>
+        <strong>Peso:</strong> ${peso} kg <br>
+        <strong>Horas de sueño:</strong> ${sueno} horas <br>
+        <strong>Nivel de dolor:</strong> ${dolor}/10 <br>
+        <strong>Tipo de sangre:</strong> ${sangre}
+      `;
+
+      formulario.reset();
+      valorDolor.textContent = "5";
+    });
+  </script>
+
+</body>
+</html>
